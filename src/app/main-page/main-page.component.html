@@ -1,5 +1,3 @@
-<!-- main-page.component.html -->
-
 <div class="main-container">
   <div class="content-box">
     <h2>Main page</h2>
@@ -11,6 +9,11 @@
         <p>{{ currentTurn === 'white' ? 'Black' : 'White' }} wins the game!</p>
         <button (click)="resetGame()">Create new game</button>
       </div>
+    </div>
+
+    <!-- Add a button for Online Mode -->
+    <div class="button-container">
+      <button (click)="goToOnlineMode()">Play Online Mode</button>
     </div>
 
     <div class="iframe-wrapper">

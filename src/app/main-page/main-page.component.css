@@ -106,6 +106,20 @@ iframe {
   background-color: #45a049;
 }
 
+.online-mode-button {
+  margin-left: 20px;
+  padding: 8px 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.online-mode-button:hover {
+  background-color: #45a049;
+}
+
 /* Responsive settings */
 
 /* For tablets and medium-sized screens */

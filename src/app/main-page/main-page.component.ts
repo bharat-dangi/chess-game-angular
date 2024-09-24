@@ -1,4 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -9,8 +10,13 @@ export class MainPageComponent implements AfterViewInit {
   currentTurn: 'white' | 'black' = 'white';
   gameEnded = false;
 
-  constructor() {
+  constructor(private router: Router) {
     window.addEventListener('message', this.receiveMessage.bind(this), false);
+  }
+
+  // Function to navigate to Online Mode
+  goToOnlineMode() {
+    this.router.navigate(['/online-game']);
   }
 
   // Listen for messages from iframe1 and iframe2
@@ -60,11 +66,9 @@ export class MainPageComponent implements AfterViewInit {
       document.getElementById('iframe2')
     ))?.contentWindow;
 
-    // Request the FEN states and store them
     iframe1Window?.postMessage({ requestFEN: true }, window.location.origin);
     iframe2Window?.postMessage({ requestFEN: true }, window.location.origin);
 
-    // Store the game state and current turn in localStorage after a short delay to wait for FEN responses
     setTimeout(() => {
       const iframe1FEN = localStorage.getItem('iframe1FEN') ?? '';
       const iframe2FEN = localStorage.getItem('iframe2FEN') ?? '';

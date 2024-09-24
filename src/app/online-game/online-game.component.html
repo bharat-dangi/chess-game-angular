@@ -1,0 +1,18 @@
+<div class="container">
+  <h2>Online Chess Game</h2>
+
+  <div *ngIf="!isJoined && !isGameCreated">
+    <button (click)="createGame()">Create new game</button>
+    <br />
+    <label for="gameCode">Game Code: </label>
+    <input [(ngModel)]="gameCode" placeholder="Enter game code" />
+    <button (click)="joinGame(gameCode)">Join</button>
+  </div>
+
+  <div *ngIf="isGameCreated || isJoined">
+    <h3>Game Code: {{ gameCode }}</h3>
+    <ngx-chess-board [size]="400" [showCoords]="true" [lightTileColor]="'#F0D9B5'" [darkTileColor]="'#B58863'"
+      (moveChange)="onMoveMade($event)">
+    </ngx-chess-board>
+  </div>
+</div>
