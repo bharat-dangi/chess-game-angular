@@ -6,4 +6,5 @@ export const environment = {
   firebaseBucket: 'pencil-assignment-real-db.appspot.com',
   firebaseMessageId: '1096875891491',
   firebaseAppId: '1:1096875891491:web:107251f3490e349be94a96',
+  databaseURL: 'https://pencil-assignment-real-db-default-rtdb.firebaseio.com',
 };

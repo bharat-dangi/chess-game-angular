@@ -1,17 +1,86 @@
-/* online-game.component.css */
-.game-container {
+.button-container {
   display: flex;
+  justify-content: center;
+  gap: 15px; /* Add space between the buttons */
+  margin-bottom: 20px; /* Space below the buttons */
+}
+
+.button-container button {
+  background-color: #007bff; /* Primary button color */
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.3s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  cursor: pointer;
+}
+
+.button-container button:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+.button-container button:active {
+  background-color: #003f7f; /* Even darker when clicked */
+  transform: scale(1.02); /* Slight shrink on click */
+}
+
+.button-container button:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Custom focus outline */
+}
+
+.input-container {
+  display: flex;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
+  gap: 10px; /* Add space between input and button */
+}
+
+.input-container input {
+  padding: 10px;
+  margin: 10px 0;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 80%; /* Adjust width to avoid too wide */
+  max-width: 400px; /* Max width */
+  box-sizing: border-box;
+}
+
+.input-container input:focus {
+  outline: none;
+  border-color: #0056b3;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.back-home-container {
+  display: flex;
   justify-content: center;
+  margin-top: 20px; /* Add space above back home button */
 }
 
-button {
-  margin: 10px;
+.back-home-container button {
+  background-color: #6c757d; /* Gray background for back button */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  transition: background-color 0.3s, transform 0.3s;
+  cursor: pointer;
 }
 
-input {
-  margin: 10px;
-  padding: 5px;
-  width: 200px;
+.back-home-container button:hover {
+  background-color: #5a6268;
+  transform: scale(1.05);
 }

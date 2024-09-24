@@ -34,6 +34,7 @@ import { environment } from 'src/environment/environment';
       storageBucket: environment.firebaseBucket,
       messagingSenderId: environment.firebaseMessageId,
       appId: environment.firebaseAppId,
+      databaseURL: environment?.databaseURL,
     }),
   ],
   providers: [],

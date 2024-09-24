@@ -1,18 +1,34 @@
-<div class="container">
-  <h2>Online Chess Game</h2>
+<div class="online-game-container">
+  <h2>Play Online Mode</h2>
 
-  <div *ngIf="!isJoined && !isGameCreated">
-    <button (click)="createGame()">Create new game</button>
-    <br />
-    <label for="gameCode">Game Code: </label>
-    <input [(ngModel)]="gameCode" placeholder="Enter game code" />
-    <button (click)="joinGame(gameCode)">Join</button>
+  <!-- Show buttons for Create New Game and Join Game only when no game is created or joined -->
+  <div *ngIf="!gameCreated && !joiningGame">
+    <div class="button-container">
+      <button (click)="createNewGame()">Create New Game</button>
+      <button (click)="askForCodeToJoin()">Join Game</button>
+    </div>
   </div>
 
-  <div *ngIf="isGameCreated || isJoined">
+  <!-- Input field for entering game code when joining a game -->
+  <div *ngIf="joiningGame && !gameCreated" class="input-container">
+    <input type="text" [(ngModel)]="enteredGameCode" placeholder="Enter game code" />
+    <button (click)="joinGame()">Join</button>
+  </div>
+
+  <!-- Display the game code and chessboard for the creator -->
+  <div *ngIf="gameCreated && isCreator">
     <h3>Game Code: {{ gameCode }}</h3>
-    <ngx-chess-board [size]="400" [showCoords]="true" [lightTileColor]="'#F0D9B5'" [darkTileColor]="'#B58863'"
-      (moveChange)="onMoveMade($event)">
-    </ngx-chess-board>
+    <p>Share this code with a friend to join the game.</p>
+    <app-iframe1 [onlineMode]="true" [gameCode]="gameCode"></app-iframe1>
+  </div>
+
+  <!-- Render the chessboard for the player who joins the game -->
+  <div *ngIf="gameCreated && !isCreator">
+    <app-iframe2 [onlineMode]="true" [gameCode]="gameCode"></app-iframe2>
+  </div>
+
+  <!-- Back Home button -->
+  <div class="back-home-container">
+    <button (click)="backHome()">Back Home</button>
   </div>
 </div>

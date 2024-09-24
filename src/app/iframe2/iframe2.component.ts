@@ -1,41 +1,99 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  AfterViewInit,
+  Input,
+  OnDestroy,
+} from '@angular/core';
 import { NgxChessBoardView } from 'ngx-chess-board';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-iframe2',
   templateUrl: './iframe2.component.html',
   styleUrls: ['./iframe2.component.css'],
 })
-export class Iframe2Component implements AfterViewInit {
+export class Iframe2Component implements AfterViewInit, OnDestroy {
   @ViewChild('chessboard', { static: false }) board!: NgxChessBoardView;
 
-  // Disable dragging for white and black pieces separately
-  lightDragDisabled = true; // White pieces disabled until white's turn
-  darkDragDisabled = false; // Black pieces should start with enabled dragging
+  @Input() onlineMode = false;
+  @Input() gameCode: string | null = null;
+
+  lightDragDisabled = true; // White disabled for black's turn
+  darkDragDisabled = false; // Black enabled initially
+  firebaseSub!: Subscription;
+
+  constructor(private db: AngularFireDatabase) {}
 
   ngAfterViewInit() {
-    const savedFEN = localStorage.getItem('iframe2FEN');
-    if (savedFEN && this.board) {
-      this.board.setFEN(savedFEN); // Load saved game state from localStorage
+    if (this.onlineMode && this.gameCode) {
+      // Listen for Firebase game state changes
+      this.firebaseSub = this.db
+        .object(`games/${this.gameCode}`)
+        .valueChanges()
+        .subscribe((gameState: any) => {
+          if (gameState) {
+            this.board.setFEN(gameState.boardState); // Sync the board state
+
+            // Enable/disable drag based on the turn
+            if (gameState.turn === 'black') {
+              this.lightDragDisabled = true;
+              this.darkDragDisabled = false;
+            } else {
+              this.lightDragDisabled = false;
+              this.darkDragDisabled = true;
+            }
+          }
+        });
+    } else {
+      // Offline mode: Load from localStorage
+      const savedFEN = localStorage.getItem('iframe2FEN');
+      if (savedFEN) {
+        this.board.setFEN(savedFEN);
+      }
+      this.board.reverse(); // Rotate the board for black
     }
-    // Rotate the board for black pieces
-    this.board.reverse();
   }
 
   makeMove(event: any) {
     const move = event?.move;
-    console.log(`Iframe2 sending move: ${move}`);
-    window.parent.postMessage(
-      { source: 'iframe2', move },
-      window.location.origin
-    );
-    // Save the FEN state after making a move
-    this.saveFEN();
+    console.log(`Iframe2 (Black) making move: ${move}`);
+
+    this.saveFEN(); // Save FEN locally for offline mode
+
+    if (this.onlineMode && this.gameCode) {
+      const currentFEN = this.board.getFEN();
+
+      // Update Firebase with the new move and switch the turn to white
+      this.db.object(`games/${this.gameCode}`).update({
+        boardState: currentFEN,
+        turn: 'white',
+      });
+    } else {
+      // Offline mode: Send the move to the other iframe
+      window.parent.postMessage(
+        { source: 'iframe2', move },
+        window.location.origin
+      );
+    }
   }
 
   saveFEN() {
     const fen = this.board.getFEN();
-    localStorage.setItem('iframe2FEN', fen);
+    if (!this.onlineMode) {
+      localStorage.setItem('iframe2FEN', fen); // Only save locally in offline mode
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.firebaseSub) {
+      this.firebaseSub.unsubscribe();
+    }
+  }
+
+  ngOnInit() {
+    window.addEventListener('message', this.receiveMessage.bind(this), false);
   }
 
   receiveMessage(event: MessageEvent) {
@@ -53,20 +111,16 @@ export class Iframe2Component implements AfterViewInit {
     }
 
     if (reset && this.board) {
-      this.board.reset(); // Reset the board for a new game
-      localStorage.removeItem('iframe2FEN'); // Clear saved FEN
+      this.board.reset(); // Reset the board
+      localStorage.removeItem('iframe2FEN');
     }
 
     if (lightDragDisabled !== undefined) {
-      this.lightDragDisabled = lightDragDisabled; // Update lightDragDisabled state
+      this.lightDragDisabled = lightDragDisabled;
     }
 
     if (darkDragDisabled !== undefined) {
-      this.darkDragDisabled = darkDragDisabled; // Update darkDragDisabled state
+      this.darkDragDisabled = darkDragDisabled;
     }
-  }
-
-  ngOnInit() {
-    window.addEventListener('message', this.receiveMessage.bind(this), false);
   }
 }
