@@ -9,7 +9,8 @@ import { NgxChessBoardView } from 'ngx-chess-board';
 export class Iframe1Component implements AfterViewInit {
   @ViewChild('chessboard', { static: false }) board!: NgxChessBoardView;
 
-  dragDisabled = false; // White should start with enabled dragging
+  lightDragDisabled = false; // White pieces should start with enabled dragging
+  darkDragDisabled = true; // Black pieces disabled until black's turn
 
   ngAfterViewInit() {
     const savedFEN = localStorage.getItem('iframe1FEN');
@@ -37,8 +38,9 @@ export class Iframe1Component implements AfterViewInit {
   receiveMessage(event: MessageEvent) {
     if (event.origin !== window.location.origin) return;
 
-    const { move, loadFEN, reset, dragDisabled } = event.data;
-
+    const { move, loadFEN, reset, lightDragDisabled, darkDragDisabled } =
+      event.data;
+    debugger;
     if (move && event.data.source === 'iframe2') {
       this.board.move(move); // Apply the move coming from iframe2
     }
@@ -52,8 +54,12 @@ export class Iframe1Component implements AfterViewInit {
       localStorage.removeItem('iframe1FEN'); // Clear saved FEN
     }
 
-    if (dragDisabled !== undefined) {
-      this.dragDisabled = dragDisabled; // Update dragDisabled state
+    if (lightDragDisabled !== undefined) {
+      this.lightDragDisabled = lightDragDisabled; // Update lightDragDisabled state
+    }
+
+    if (darkDragDisabled !== undefined) {
+      this.darkDragDisabled = darkDragDisabled; // Update darkDragDisabled state
     }
   }
 

@@ -66,8 +66,8 @@ export class MainPageComponent implements AfterViewInit {
 
     // Store the game state and current turn in localStorage after a short delay to wait for FEN responses
     setTimeout(() => {
-      const iframe1FEN = localStorage.getItem('iframe1FEN') || '';
-      const iframe2FEN = localStorage.getItem('iframe2FEN') || '';
+      const iframe1FEN = localStorage.getItem('iframe1FEN') ?? '';
+      const iframe2FEN = localStorage.getItem('iframe2FEN') ?? '';
       const gameState = {
         currentTurn: this.currentTurn,
         iframe1FEN,
@@ -123,11 +123,11 @@ export class MainPageComponent implements AfterViewInit {
     ))?.contentWindow;
 
     iframe1Window?.postMessage(
-      { dragDisabled: this.currentTurn !== 'white' },
+      { lightDragDisabled: false, darkDragDisabled: true },
       window.location.origin
     );
     iframe2Window?.postMessage(
-      { dragDisabled: this.currentTurn !== 'black' },
+      { lightDragDisabled: true, darkDragDisabled: false },
       window.location.origin
     );
   }
