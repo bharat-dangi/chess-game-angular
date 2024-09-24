@@ -12,11 +12,12 @@ export class Iframe2Component implements AfterViewInit {
   dragDisabled = true; // Black's board starts disabled until it's black's turn
 
   ngAfterViewInit() {
-    this.board.reverse(); // Rotate the board for black pieces
     const savedFEN = localStorage.getItem('iframe2FEN');
     if (savedFEN && this.board) {
       this.board.setFEN(savedFEN); // Load saved game state from localStorage
     }
+    // Rotate the board for black pieces
+    this.board.reverse();
   }
 
   makeMove(event: any) {
