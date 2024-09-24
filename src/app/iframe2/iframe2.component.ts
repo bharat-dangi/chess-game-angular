@@ -9,20 +9,30 @@ import { NgxChessBoardView } from 'ngx-chess-board';
 export class Iframe2Component implements AfterViewInit {
   @ViewChild('chessboard', { static: false }) board!: NgxChessBoardView;
 
-  dragDisabled = false; // Initialize dragDisabled to false
+  dragDisabled = true; // Black's board starts disabled until it's black's turn
 
   ngAfterViewInit() {
     this.board.reverse(); // Rotate the board for black pieces
+    const savedFEN = localStorage.getItem('iframe2FEN');
+    if (savedFEN && this.board) {
+      this.board.setFEN(savedFEN); // Load saved game state from localStorage
+    }
   }
 
   makeMove(event: any) {
     const move = event?.move;
     console.log(`Iframe2 sending move: ${move}`);
-    // Send move to main page
     window.parent.postMessage(
       { source: 'iframe2', move },
       window.location.origin
     );
+    // Save the FEN state after making a move
+    this.saveFEN();
+  }
+
+  saveFEN() {
+    const fen = this.board.getFEN();
+    localStorage.setItem('iframe2FEN', fen);
   }
 
   receiveMessage(event: MessageEvent) {
@@ -31,20 +41,20 @@ export class Iframe2Component implements AfterViewInit {
     const { move, loadFEN, reset, dragDisabled } = event.data;
 
     if (move && event.data.source === 'iframe1') {
-      console.log(`Iframe2 received move: ${move}`);
       this.board.move(move); // Apply the move coming from iframe1
     }
 
-    if (loadFEN) {
+    if (loadFEN && this.board) {
       this.board.setFEN(loadFEN); // Load saved game state
     }
 
-    if (reset) {
+    if (reset && this.board) {
       this.board.reset(); // Reset the board for a new game
+      localStorage.removeItem('iframe2FEN'); // Clear saved FEN
     }
 
     if (dragDisabled !== undefined) {
-      this.dragDisabled = dragDisabled; // Update dragDisabled state based on message from main page
+      this.dragDisabled = dragDisabled; // Update dragDisabled state
     }
   }
 

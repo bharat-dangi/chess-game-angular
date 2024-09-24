@@ -1,8 +1,19 @@
+<!-- main-page.component.html -->
+
 <div class="main-container">
   <div class="content-box">
     <h2>Main page</h2>
-    <div class="iframe-wrapper">
 
+    <!-- Modal for Checkmate Notification -->
+    <div *ngIf="gameEnded" class="modal">
+      <div class="modal-content">
+        <h2>Checkmate!</h2>
+        <p>{{ currentTurn === 'white' ? 'Black' : 'White' }} wins the game!</p>
+        <button (click)="resetGame()">Create new game</button>
+      </div>
+    </div>
+
+    <div class="iframe-wrapper">
       <!-- Iframe 1 Container -->
       <div class="iframe-container-1">
         <div class="label">Iframe 1</div>
@@ -14,7 +25,6 @@
         <div class="label">Iframe 2</div>
         <iframe id="iframe2" title="Iframe2" src="/iframe2"></iframe>
       </div>
-
     </div>
   </div>
 </div>
