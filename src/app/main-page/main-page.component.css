@@ -65,6 +65,9 @@ iframe {
   margin-left: 30px;
 }
 
+/* main-page.component.css */
+
+/* Modal background overlay */
 .modal {
   position: fixed;
   top: 0;
