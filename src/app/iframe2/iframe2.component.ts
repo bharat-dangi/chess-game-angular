@@ -136,8 +136,8 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
     }
   }
 
-  // Navigate back to home page
-  goBackHome() {
-    this.router.navigate(['/mainpage']); // Navigates to the main page
+  // Navigate back to Online Mode Page
+  startNewGame() {
+    this.router.navigate(['/online-game']);
   }
 }
