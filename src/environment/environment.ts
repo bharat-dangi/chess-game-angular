@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   firebaseApiKey: 'AIzaSyAVFYhkuqT_m0g8K1BNRuQiLi6OcnErWYM',
   firebaseAuthDomain: 'pencil-assignment-real-db.firebaseapp.com',
   firebaseProjectId: 'pencil-assignment-real-db',
