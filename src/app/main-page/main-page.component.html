@@ -6,7 +6,7 @@
     <div *ngIf="gameEnded" class="modal">
       <div class="modal-content">
         <h2>Checkmate!</h2>
-        <p>{{ currentTurn === 'white' ? 'Black' : 'White' }} wins the game!</p>
+        <p>{{ currentTurn === 'white' ? 'White':'Black' }} wins the game!</p>
         <button (click)="resetGame()">Create new game</button>
       </div>
     </div>

@@ -124,6 +124,7 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
 
     if (reset && this.board) {
       this.board.reset(); // Reset the board
+      this.board.reverse();
       localStorage.removeItem('iframe2FEN');
     }
 
