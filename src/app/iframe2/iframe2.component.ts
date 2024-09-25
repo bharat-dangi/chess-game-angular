@@ -8,6 +8,7 @@ import {
 import { NgxChessBoardView } from 'ngx-chess-board';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-iframe2',
@@ -26,7 +27,7 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
   checkmateDetected = false; // Flag to show checkmate message
   checkmateMessage: string = ''; // Message for win or loss
 
-  constructor(private db: AngularFireDatabase) {}
+  constructor(private db: AngularFireDatabase, private router: Router) {}
 
   ngAfterViewInit() {
     if (this.onlineMode && this.gameCode) {
@@ -133,5 +134,10 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
     if (darkDragDisabled !== undefined) {
       this.darkDragDisabled = darkDragDisabled;
     }
+  }
+
+  // Navigate back to home page
+  goBackHome() {
+    this.router.navigate(['/mainpage']); // Navigates to the main page
   }
 }
