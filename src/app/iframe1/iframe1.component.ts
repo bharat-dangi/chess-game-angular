@@ -57,7 +57,9 @@ export class Iframe1Component implements AfterViewInit, OnDestroy {
 
   makeMove(event: any) {
     const move = event?.move;
-    console.log(`Iframe1 (White) making move: ${move}`);
+    const isCheckMate: boolean = this.board
+      .getMoveHistory()
+      .some((moveHistory) => moveHistory?.check && moveHistory?.mate);
 
     this.saveFEN(); // Save FEN locally for offline mode
 
@@ -72,7 +74,7 @@ export class Iframe1Component implements AfterViewInit, OnDestroy {
     } else {
       // Offline mode: Send the move to the other iframe
       window.parent.postMessage(
-        { source: 'iframe1', move },
+        { source: 'iframe1', move, checkmate: isCheckMate },
         window.location.origin
       );
     }
