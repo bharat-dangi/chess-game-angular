@@ -38,7 +38,7 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
         .subscribe((gameState: any) => {
           if (gameState) {
             this.board.setFEN(gameState.boardState); // Sync the board state
-
+            this.board.reverse();
             // Allow black to move only when it's black's turn
             if (gameState.turn === 'black') {
               this.lightDragDisabled = true; // White remains disabled
@@ -61,8 +61,8 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
       if (savedFEN) {
         this.board.setFEN(savedFEN);
       }
+      this.board.reverse();
     }
-    this.board.reverse();
   }
 
   makeMove(event: any) {
