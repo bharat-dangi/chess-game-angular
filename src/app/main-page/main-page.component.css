@@ -65,7 +65,39 @@ iframe {
   margin-left: 30px;
 }
 
-/* main-page.component.css */
+/* Play Online Mode Button */
+.online-mode-button {
+  padding: 12px 24px; /* Larger padding for a more prominent button */
+  background-color: #007bff; /* Primary blue color */
+  color: white;
+  font-size: 18px; /* Larger font size */
+  font-weight: bold; /* Bold text for emphasis */
+  border: none;
+  cursor: pointer;
+  border-radius: 6px; /* Rounded corners */
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* Hover effect for the button */
+.online-mode-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+  transform: scale(1.05); /* Slight zoom effect */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+/* Button active state */
+.online-mode-button:active {
+  background-color: #003f7f; /* Even darker blue when clicked */
+  transform: scale(1.02); /* Slight shrink on click */
+}
+
+/* Focus state for accessibility */
+.online-mode-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.5); /* Custom focus outline */
+}
 
 /* Modal background overlay */
 .modal {
@@ -78,7 +110,7 @@ iframe {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Make sure the modal is on top of everything */
+  z-index: 1000; /* Ensure modal is on top */
 }
 
 /* Modal content box */
@@ -106,20 +138,6 @@ iframe {
   background-color: #45a049;
 }
 
-.online-mode-button {
-  margin-left: 20px;
-  padding: 8px 12px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.online-mode-button:hover {
-  background-color: #45a049;
-}
-
 /* Responsive settings */
 
 /* For tablets and medium-sized screens */
@@ -137,13 +155,13 @@ iframe {
   .iframe-container-1,
   .iframe-container-2 {
     width: 100%;
-    height: auto; /* Adjust height to auto for responsiveness */
+    height: auto;
   }
 
   iframe {
-    margin-left: 0; /* Reset left margin */
+    margin-left: 0;
     margin-top: 0;
-    height: 400px; /* Adjust iframe height for smaller screens */
+    height: 400px;
   }
 }
 
@@ -161,10 +179,10 @@ iframe {
   }
 
   iframe {
-    height: 300px; /* Further reduce iframe height for mobile */
+    height: 300px;
   }
 
   .label {
-    font-size: 16px; /* Adjust label font size for mobile */
+    font-size: 16px;
   }
 }
