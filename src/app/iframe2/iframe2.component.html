@@ -1,3 +1,14 @@
-<ngx-chess-board #chessboard [size]="400" [showCoords]="false" [lightTileColor]="'#D5C08B'" [darkTileColor]="'#FB0207'"
-  (moveChange)="makeMove($event)" [darkDisabled]="darkDragDisabled" [lightDisabled]="lightDragDisabled">
-</ngx-chess-board>
+<div class="iframe-container">
+  <ngx-chess-board #chessboard [size]="400" [showCoords]="false" [lightTileColor]="'#D5C08B'"
+    [darkTileColor]="'#FB0207'" (moveChange)="makeMove($event)" [darkDisabled]="darkDragDisabled"
+    [lightDisabled]="lightDragDisabled">
+  </ngx-chess-board>
+
+  <!-- Checkmate message -->
+  <div *ngIf="checkmateDetected" class="modal">
+    <div class="modal-content">
+      <h2>Checkmate!</h2>
+      <p>{{ checkmateMessage }}</p>
+    </div>
+  </div>
+</div>

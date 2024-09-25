@@ -23,6 +23,8 @@ export class Iframe1Component implements AfterViewInit, OnDestroy {
   lightDragDisabled = false; // White starts enabled for the creator
   darkDragDisabled = true; // Black is always disabled for the creator
   firebaseSub!: Subscription; // Firebase subscription to sync state
+  checkmateDetected = false; // Flag to show checkmate message
+  checkmateMessage: string = ''; // Message for win or loss
 
   constructor(private db: AngularFireDatabase) {}
 
@@ -44,6 +46,12 @@ export class Iframe1Component implements AfterViewInit, OnDestroy {
               this.lightDragDisabled = true; // Disable white dragging
               this.darkDragDisabled = true; // Black remains disabled
             }
+
+            if (gameState.checkmate) {
+              this.checkmateDetected = true;
+              this.checkmateMessage =
+                gameState.turn === 'white' ? 'You Lost!' : 'You Won!';
+            }
           }
         });
     } else {
@@ -57,11 +65,11 @@ export class Iframe1Component implements AfterViewInit, OnDestroy {
 
   makeMove(event: any) {
     const move = event?.move;
+    this.saveFEN(); // Save FEN locally for offline mode
+
     const isCheckMate: boolean = this.board
       .getMoveHistory()
       .some((moveHistory) => moveHistory?.check && moveHistory?.mate);
-
-    this.saveFEN(); // Save FEN locally for offline mode
 
     if (this.onlineMode && this.gameCode) {
       const currentFEN = this.board.getFEN();
@@ -70,6 +78,7 @@ export class Iframe1Component implements AfterViewInit, OnDestroy {
       this.db.object(`games/${this.gameCode}`).update({
         boardState: currentFEN,
         turn: 'black', // Now it's black's turn
+        checkmate: isCheckMate,
       });
     } else {
       // Offline mode: Send the move to the other iframe

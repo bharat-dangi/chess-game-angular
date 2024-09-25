@@ -23,6 +23,8 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
   lightDragDisabled = true; // White disabled for joiner
   darkDragDisabled = false; // Black enabled for joiner
   firebaseSub!: Subscription;
+  checkmateDetected = false; // Flag to show checkmate message
+  checkmateMessage: string = ''; // Message for win or loss
 
   constructor(private db: AngularFireDatabase) {}
 
@@ -44,6 +46,12 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
               this.lightDragDisabled = true; // White remains disabled
               this.darkDragDisabled = true; // Disable black dragging
             }
+
+            if (gameState.checkmate) {
+              this.checkmateDetected = true;
+              this.checkmateMessage =
+                gameState.turn === 'black' ? 'You Lost!' : 'You Won!';
+            }
           }
         });
     } else {
@@ -52,8 +60,8 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
       if (savedFEN) {
         this.board.setFEN(savedFEN);
       }
-      this.board.reverse(); // Rotate the board for black
     }
+    this.board.reverse();
   }
 
   makeMove(event: any) {
@@ -71,6 +79,7 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
       this.db.object(`games/${this.gameCode}`).update({
         boardState: currentFEN,
         turn: 'white', // Now it's white's turn
+        checkmate: isCheckMate,
       });
     } else {
       // Offline mode: Send the move to the other iframe
