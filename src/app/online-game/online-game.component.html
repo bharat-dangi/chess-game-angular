@@ -31,4 +31,12 @@
   <div class="back-home-container">
     <button (click)="backHome()">Back Home</button>
   </div>
+
+  <!-- Popup modal for deleted game message -->
+  <div class="popup-container" *ngIf="showPopup">
+    <div class="popup-content">
+      <p>{{ popupMessage }}</p>
+      <button (click)="closePopup()">Close</button>
+    </div>
+  </div>
 </div>

@@ -20,8 +20,8 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
   @Input() onlineMode = false;
   @Input() gameCode: string | null = null;
 
-  lightDragDisabled = true; // White disabled for black's turn
-  darkDragDisabled = false; // Black enabled initially
+  lightDragDisabled = true; // White disabled for joiner
+  darkDragDisabled = false; // Black enabled for joiner
   firebaseSub!: Subscription;
 
   constructor(private db: AngularFireDatabase) {}
@@ -36,13 +36,13 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
           if (gameState) {
             this.board.setFEN(gameState.boardState); // Sync the board state
 
-            // Enable/disable drag based on the turn
+            // Allow black to move only when it's black's turn
             if (gameState.turn === 'black') {
-              this.lightDragDisabled = true;
-              this.darkDragDisabled = false;
+              this.lightDragDisabled = true; // White remains disabled
+              this.darkDragDisabled = false; // Enable black dragging
             } else {
-              this.lightDragDisabled = false;
-              this.darkDragDisabled = true;
+              this.lightDragDisabled = true; // White remains disabled
+              this.darkDragDisabled = true; // Disable black dragging
             }
           }
         });
@@ -68,7 +68,7 @@ export class Iframe2Component implements AfterViewInit, OnDestroy {
       // Update Firebase with the new move and switch the turn to white
       this.db.object(`games/${this.gameCode}`).update({
         boardState: currentFEN,
-        turn: 'white',
+        turn: 'white', // Now it's white's turn
       });
     } else {
       // Offline mode: Send the move to the other iframe

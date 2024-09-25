@@ -17,18 +17,18 @@ import { Subscription } from 'rxjs';
 export class Iframe1Component implements AfterViewInit, OnDestroy {
   @ViewChild('chessboard', { static: false }) board!: NgxChessBoardView;
 
-  @Input() onlineMode = false;
-  @Input() gameCode: string | null = null;
+  @Input() onlineMode = false; // Flag for online mode
+  @Input() gameCode: string | null = null; // Game code for Firebase reference
 
-  lightDragDisabled = false; // White starts enabled
-  darkDragDisabled = true; // Black starts disabled
-  firebaseSub!: Subscription;
+  lightDragDisabled = false; // White starts enabled for the creator
+  darkDragDisabled = true; // Black is always disabled for the creator
+  firebaseSub!: Subscription; // Firebase subscription to sync state
 
   constructor(private db: AngularFireDatabase) {}
 
   ngAfterViewInit() {
     if (this.onlineMode && this.gameCode) {
-      // Listen for Firebase game state changes
+      // Continuously listen for game state changes from Firebase
       this.firebaseSub = this.db
         .object(`games/${this.gameCode}`)
         .valueChanges()
@@ -36,13 +36,13 @@ export class Iframe1Component implements AfterViewInit, OnDestroy {
           if (gameState) {
             this.board.setFEN(gameState.boardState); // Sync the board state
 
-            // Enable/disable drag based on the turn
+            // Allow white to move only when it's white's turn
             if (gameState.turn === 'white') {
-              this.lightDragDisabled = false;
-              this.darkDragDisabled = true;
+              this.lightDragDisabled = false; // Enable white dragging
+              this.darkDragDisabled = true; // Black remains disabled
             } else {
-              this.lightDragDisabled = true;
-              this.darkDragDisabled = false;
+              this.lightDragDisabled = true; // Disable white dragging
+              this.darkDragDisabled = true; // Black remains disabled
             }
           }
         });
@@ -67,7 +67,7 @@ export class Iframe1Component implements AfterViewInit, OnDestroy {
       // Update Firebase with the new move and switch the turn to black
       this.db.object(`games/${this.gameCode}`).update({
         boardState: currentFEN,
-        turn: 'black',
+        turn: 'black', // Now it's black's turn
       });
     } else {
       // Offline mode: Send the move to the other iframe
